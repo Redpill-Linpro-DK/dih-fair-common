@@ -1,0 +1,36 @@
+name: "Load Environment Variables"
+description: "Loads the .env file based on the branch name"
+inputs:
+  rootDir:
+    description: "The root dir"
+    required: true
+    default: "."
+runs:
+  using: "composite"
+  steps:
+    - name: Determine Environment File
+      id: determine-env
+      shell: bash
+      run: |
+        echo "Branch name: ${{ github.ref_name }}"
+        if [[ "${{ github.ref_name }}" == "main" || "${{ github.ref_name }}" == hotfix/* ]]; then
+          echo "env_file=constants.prod.env" >> $GITHUB_OUTPUT
+        elif [[ "${{ github.ref_name }}" == "develop" ]]; then
+          echo "env_file=constants.test.env" >> $GITHUB_OUTPUT
+        else
+          echo "env_file=constants.dev.env" >> $GITHUB_OUTPUT
+        fi
+        cat $GITHUB_OUTPUT
+    - name: Load Constant Common Variables
+      id: load-constant-commons
+      uses: cardinalby/export-env-action@v2
+      with:
+        envFile: ${{ inputs.rootDir }}/.github/variables/constants.common.env
+        expandWithJobEnv: "true"
+
+    - name: Load Environment Variables
+      id: load-env-variables
+      uses: cardinalby/export-env-action@v2
+      with:
+        envFile: ${{ inputs.rootDir }}/.github/variables/${{ steps.determine-env.outputs.env_file }}
+        expandWithJobEnv: "true"
