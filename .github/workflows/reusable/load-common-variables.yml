@@ -9,7 +9,7 @@ jobs:
       - name: Checkout common-deploy
         uses: actions/checkout@v4
         with:
-          repository: Redpill-Linpro-DK/marw-test-azure-deploy@main
+          repository: Redpill-Linpro-DK/dih-fair-common@main
           token: ${{ secrets.DIH_FAIR_COMMON_REPO_PAT }}
           path: common-repo
 

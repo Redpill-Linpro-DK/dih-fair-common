@@ -10,7 +10,7 @@ runs:
     - name: Checkout common-deploy
       uses: actions/checkout@v4
       with:
-        repository: Redpill-Linpro-DK/marw-test-azure-deploy@main
+        repository: Redpill-Linpro-DK/dih-fair-common@main
         token: ${{ inputs.azureDeployRepoToken }}
         path: common-repo
 
