@@ -10,11 +10,12 @@ runs:
     - name: Checkout common-deploy
       uses: actions/checkout@v4
       with:
-        repository: Redpill-Linpro-DK/dih-fair-common@main
+        repository: Redpill-Linpro-DK/dih-fair-common
+        ref: main
         token: ${{ inputs.azureDeployRepoToken }}
-        path: common-repo
+        path: tmp-repo
 
     - name: Load environment variables
-      uses: ./common-repo/.github/actions/loadEnvVariables
+      uses: ./tmp-repo/.github/actions/loadEnvVariables
       with:
-        rootDir: common-repo
+        rootDir: tmp-repo
