@@ -27,11 +27,11 @@ jobs:
 
       - name: Authenticate with GitHub Packages
         run: |
-          echo "Nuget feed URL: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
+          echo "Nuget feed URL: $nugetFeed"
           echo "Nuget user: $secrets_DIH_FAIR_PACKAGES_PAT_user"
           echo "Secret length: ${#DIH_FAIR_PACKAGES_PAT}"
 
-          dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json \
+          dotnet nuget add source $nugetFeed \
             --name github \
             --username $secrets_DIH_FAIR_PACKAGES_PAT_user \
             --password ${{ secrets.DIH_FAIR_PACKAGES_PAT }} \
@@ -73,7 +73,7 @@ jobs:
             for package in output/$project/*.nupkg; do
               echo "Publishing $package"
               dotnet nuget push "$package" \
-                --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json \
+                --source $nugetFeed \
                 --api-key ${{ secrets.DIH_FAIR_PACKAGES_PAT }} \
                 --skip-duplicate
             done
