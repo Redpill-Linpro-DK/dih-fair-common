@@ -140,19 +140,3 @@ jobs:
               env=$environment \
               postfixCount=$postfixCount \
               uniqueDeployId=$uniqueDeployId
-
-      # - name: Log in to Azure
-      #   uses: azure/login@v1
-      #   with:
-      #     creds: $DIH_FAIR_AZURE_CREDENTIALS
-
-      # - name: Ensure Resource Group Exists and Deploy Resources
-      #   run: |
-      #     echo ">>> Using variable LOCATION: $resourceLocation"
-      #     # Ensure the resource group exists
-      #     az group create --name MARWTESTFROMGITHUB --location $resourceLocation
-
-      #     # Deploy the resources using the Bicep file
-      #     az deployment group create \
-      #       --resource-group MARWTESTFROMGITHUB \
-      #       --template-file ./source/IaC/main.bicep
