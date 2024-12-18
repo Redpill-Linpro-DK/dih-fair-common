@@ -1,0 +1,32 @@
+name: Publish package to GitHub Packages
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "../../Source/Schemas/sample-service-oas.yml"
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update java classes
+        run: |
+          cd scripts
+          ./build_schemas.sh ../../Source/Schemas/sample-service-oas.yml 1.0.2
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: "temurin"
+
+      - name: Publish package
+        run: mvn clean package -f dih.domain/pom.xml
+
+      - name: Publish package
+        run: mvn deploy -f dih.domain/pom.xml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

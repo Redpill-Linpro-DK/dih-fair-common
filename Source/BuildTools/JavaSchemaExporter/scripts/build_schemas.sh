@@ -1,13 +1,24 @@
 #!/bin/bash
-java -jar ../tools/openapi-generator-cli.jar generate -g java -i "$1" -o ../../../DIH.Java.Domain/ -c build_schemas_config.yaml --artifact-version 1.0.1 --minimal-update &&
-  rm ../../../DIH.Java.Domain/src/main/AndroidManifest.xml &&
-  rm -rf ../../../DIH.Java.Domain/src/main/java/org &&
-  rm -rf ../../../DIH.Java.Domain/.github/ &&
-  rm ../../../DIH.Java.Domain/.travis.yml &&
-  rm ../../../DIH.Java.Domain/build.gradle &&
-  rm ../../../DIH.Java.Domain/build.sbt &&
-  rm ../../../DIH.Java.Domain/settings.gradle &&
-  rm -rf ../../../DIH.Java.Domain/gradle* &&
-  rm -rf ../../../DIH.Java.Domain/api &&
-  rm -rf ../../../DIH.Java.Domain/src/test &&
-  rm -rf ../../../DIH.Java.Domain/git_push.sh
+workdir=../../../DIH.Domain/
+java -jar ../tools/openapi-generator-cli.jar generate -g java -i "$1" -o "$workdir" -c build_schemas_config.yaml --artifact-version "$2" --minimal-update &&
+  rm "$workdir"src/main/AndroidManifest.xml &&
+  rm -rf "$workdir"src/main/java/org &&
+  rm -rf "$workdir".github/ &&
+  rm "$workdir".travis.yml &&
+  rm "$workdir"build.gradle &&
+  rm "$workdir"build.sbt &&
+  rm "$workdir"settings.gradle &&
+  rm -rf "$workdir"gradle* &&
+  rm -rf "$workdir"api &&
+  rm -rf "$workdir"src/test &&
+  rm -rf "$workdir"git_push.sh &&
+  head -n -1 "$workdir"pom.xml >"$workdir"tmp.xml && mv "$workdir"tmp.xml "$workdir"pom.xml &&
+  echo "    <distributionManagement>
+          <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/Redpill-Linpro-DK/dih-fair-common</url>
+          </repository>
+    </distributionManagement>
+</project>" >>"$workdir"pom.xml &&
+  mvn clean compile -f "$workdir"pom.xml
