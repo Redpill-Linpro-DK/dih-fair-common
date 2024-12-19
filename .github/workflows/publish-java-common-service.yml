@@ -1,0 +1,41 @@
+name: Publish package to GitHub Packages
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "../../Source/Schemas/sample-service-oas.yml"
+jobs:
+  publish:
+    name: Generate Java classes and publish
+    env:
+      PROJECT_DIR: Source/DIH.Java.Domain.Service/
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Load environment variables
+        uses: ./.github/actions/loadEnvVariables
+
+      - name: Update java classes
+        env:
+          GNR_OUTPUT_DIR: ../../../DIH.Java.Domain.Service/
+        run: |
+          cd Source/BuildTools/JavaSchemaExporter/scripts/
+          ./generate_java_from_oas.sh -i ../../../Schemas/sample-service-oas.yml --artifact-id=service --group-id=dk.rdpl.dih.common.model --artifact-version="$packageVersionMajorMinor" --model-package=dk.rdpl.dih.common.model.service
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: "temurin"
+
+      - name: Publish package
+        run: mvn clean package -f Source/DIH.Java.Domain.Service/pom.xml
+
+      - name: Publish package
+        run: mvn deploy -f Source/DIH.Java.Domain.Service/pom.xml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
