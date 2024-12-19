@@ -4,7 +4,7 @@ on:
     branches:
       - main
     paths:
-      - "../../Source/Schemas/sample-service-oas.yml"
+      - "Source/Schemas/sample-service-oas.yml"
 jobs:
   publish:
     name: Generate Java classes and publish
