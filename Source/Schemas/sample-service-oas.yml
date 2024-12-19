@@ -8,7 +8,7 @@ paths:
   /inventory/{id}/{warehouseId}:
     get:
       summary: Get Inventory Data
-      description: Retrieve inventory data for a specific product in a warehouse.
+      description: Retrieve Inventory data for a specific product in a warehouse.
       operationId: getInventoryData
       parameters:
         - name: id
