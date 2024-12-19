@@ -23,7 +23,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: "8.0.x"
 
       - name: Authenticate with GitHub Packages
         run: |
@@ -57,7 +57,7 @@ jobs:
       - name: Generate Domain Classes
         uses: ./.github/actions/generateDomainClasses
         with:
-          domainobjects_file_path: './Source/Schemas/domain-objects.yml'
+          domainobjects_file_path: "./Source/Schemas/domain-objects.yml"
 
       - name: Build and Pack Projects
         run: |
@@ -129,7 +129,7 @@ jobs:
               tags="$tags" \
               uniqueDeployId=$uniqueDeployId \
               domainObjectsJson="$(cat ./Source/IaC/domain-objects-iac-map.json)"
-          
+
           echo "Assigning Developer Permissions..."
           az deployment group create \
             --resource-group $resourceGroupName \
